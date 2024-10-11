@@ -32,7 +32,7 @@ cron.schedule('* * * * *', async () => {
                     console.log('Resultado de la consulta:', recordatorio);
 
                     // Llama a la función para enviar recordatorios
-                    fetch('http://161.35.181.61:3000/enviar-recordatorios-programados', {
+                    fetch('https://back.capulina.store/enviar-recordatorios-programados', {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json' }
                     })

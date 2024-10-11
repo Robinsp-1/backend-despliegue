@@ -118,7 +118,7 @@ module.exports.listarDetallesPedidoCliente = (req, res) => {
 
        
 
-        const baseUrl = 'http://161.35.181.61:3000/Imagenes/productos/';
+        const baseUrl = 'https://back.capulina.store/Imagenes/productos/';
 
         const detallesConImagenes = results.map(detalle => {
             return {

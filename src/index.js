@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://161.35.181.61:5173',
+    origin: 'https://capulina.store/',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 

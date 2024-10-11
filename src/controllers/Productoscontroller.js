@@ -54,7 +54,7 @@ module.exports.listarProductos = (req, res) => {
             return res.status(500).send('Error al listar los productos');
         }
 
-        const baseUrl = 'http://161.35.181.61:3000/Imagenes/productos/';
+        const baseUrl = 'https://back.capulina.store/Imagenes/productos/';
 
         const productosConImagenes = results.map(producto => {
             return {
@@ -149,7 +149,7 @@ module.exports.listarproductoporid = (req, res) => {
             return res.status(404).send('Producto no encontrado');
         }
 
-        const baseUrl = 'http://161.35.181.61:3000/Imagenes/productos/';
+        const baseUrl = 'https://back.capulina.store/Imagenes/productos/';
         const producto = results[0];
         producto.imagen_url = `${baseUrl}${producto.imagen_url}`;
 
