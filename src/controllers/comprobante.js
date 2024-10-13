@@ -49,7 +49,7 @@ class ComprobanteController {
 
             // Datos de la venta
             doc.fontSize(12).text(`ID de Venta: ${venta.id_venta}`, 50, 150);
-            doc.text(`Fecha: ${new Date(venta.fecha_venta).toLocaleDateString()}`, 50, 170);
+            doc.text(`Fecha: ${new Date(venta.fecha_venta).toLocaleDateString('es-GT')}`, 50, 170);
             doc.text(`Cliente: ${venta.nombre_cliente}`, 50, 190);
             doc.text(`Dirección: ${venta.direccion}`, 50, 210);
             doc.moveDown(2);

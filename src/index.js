@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cors({
-    origin: 'https://capulina.store/',
+    origin: 'https://capulina.store',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 

@@ -324,7 +324,7 @@ module.exports.restaurarCredito = (req, res) => {
         WHERE id_credito = ?
     `;
 
-    connection.query(query, [id_credito], (err, results) => {
+    db.query(query, [id_credito], (err, results) => {
         if (err) {
             console.error('Error al restaurar el crédito:', err);
             return res.status(500).json({ error: 'Error al restaurar el crédito.' });

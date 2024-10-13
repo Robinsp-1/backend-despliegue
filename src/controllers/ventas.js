@@ -61,10 +61,10 @@ module.exports.registrarVenta = async (req, res) => {
 
                     // Función para registrar la venta al contado
                     const registrarVentaContado = () => {
-                        const totalVenta = productos.reduce((acc, prod) => acc + prod.total, 0); 
+                        const totalVenta = productos.reduce((acc, prod) => acc + prod.total, 0);
                         connection.query(
-                            'INSERT INTO ventas (id_usuario, fecha_venta, nit, estado_pago, nombre_cliente, tipo_venta, id_credito, total, direccion, anulado) VALUES (?, ?, ?, ?, ?, 1, ?, ?, ?, 0)',
-                            [id_usuario, fecha_venta, nit, estado_pago, nombre_cliente, id_credito, totalVenta, direccion], 
+                            'INSERT INTO ventas (id_usuario, fecha_venta, nit, estado_pago, nombre_cliente, tipo_venta, id_credito, total, direccion, anulado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)', // Cambié el 1 por el valor de tipo_venta
+                            [id_usuario, fecha_venta, nit, estado_pago, nombre_cliente, tipo_venta, id_credito, totalVenta, direccion],
                             (err, result) => {
                                 if (err) {
                                     return connection.rollback(() => {
@@ -223,7 +223,7 @@ module.exports.listarDetallesVenta = async (req, res) => {
     }
 
     try {
-    
+
         const query = `
             SELECT dv.id_detalle, dv.cantidad, dv.total, dv.precio_unidad, p.nombre AS nombre_producto
             FROM detallesventas dv
@@ -240,7 +240,7 @@ module.exports.listarDetallesVenta = async (req, res) => {
                 return res.status(404).json({ error: 'No se encontraron detalles para la venta.' });
             }
 
-           
+
             res.status(200).json(resultados);
         });
     } catch (error) {
@@ -303,7 +303,7 @@ module.exports.VentaPorId = (req, res) => {
         });
     }
 
-  
+
     obtenerVentaPorId(id_venta)
         .then((venta) => {
             // Retornar la información de la venta
@@ -333,12 +333,12 @@ module.exports.obtenerVentaPorId = (id_venta) => {
                 return reject(err);
             }
 
-          
+
             if (ventas.length === 0) {
                 return reject(new Error('Venta no encontrada'));
             }
 
-            resolve(ventas[0]); 
+            resolve(ventas[0]);
         });
     });
 };
@@ -368,7 +368,7 @@ module.exports.actualizarVentaPorId = (id_venta, datosActualizacion) => {
                 return reject(err);
             }
 
-         
+
             if (result.affectedRows === 0) {
                 return reject(new Error('No se pudo actualizar la venta, verifique el ID'));
             }
@@ -432,11 +432,22 @@ module.exports.Ventas = (req, res) => {
 module.exports.listarVentasAnuladas = (req, res) => {
     try {
         connection.query(
-                `SELECT v.id_venta, v.fecha_venta, v.nit, v.estado_pago, v.total, 
-                        v.anulado, u.nombres AS nombre_usuario, v.id_credito
-                FROM ventas v
-                LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                WHERE v.anulado = 1`, 
+            `SELECT 
+                    v.id_venta, 
+                    v.fecha_venta, 
+                    v.nit, 
+                    v.estado_pago, 
+                    v.total, 
+                    v.anulado, 
+                    v.nombre_cliente AS nombre_cliente,  -- Esto es correcto, proviene de 'ventas'
+                    v.id_credito
+                FROM 
+                    ventas v
+                LEFT JOIN 
+                    usuarios u ON v.id_usuario = u.id_usuario
+                WHERE 
+                    v.anulado = 1
+               `,
             (err, ventas) => {
                 if (err) throw err;
 
@@ -493,21 +504,21 @@ module.exports.listarVentasCreditoNoFacturadas = async (req, res) => {
 
 // Obtener el NIT del usuario
 module.exports.obtenerNitUsuario = async (req, res) => {
-    const { id_usuario } = req.params; 
+    const { id_usuario } = req.params;
 
     try {
         connection.query(
             `SELECT nit 
              FROM usuarios 
              WHERE id_usuario = ?`,
-            [id_usuario], 
+            [id_usuario],
             (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Error al obtener el NIT del usuario.' });
                 }
 
                 if (result.length > 0) {
-                    res.status(200).json({ nit: result[0].nit }); 
+                    res.status(200).json({ nit: result[0].nit });
                 } else {
                     res.status(404).json({ error: 'Usuario no encontrado.' });
                 }
